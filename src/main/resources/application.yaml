@@ -1,0 +1,43 @@
+spring:
+  flyway:
+    enabled: false
+    baseline-on-migrate: true
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    #    generate-ddl: false
+    hibernate:
+      ddl-auto: update
+#      ddl-auto: create-drop
+    properties:
+      hibernate:
+        generate_statistics: true
+        jdbc:
+          batch_size: 15
+        order_inserts: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test_lam
+    username: postgres
+    password: password
+    driverClassName: org.postgresql.Driver
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration
+#https://github.com/leangen/graphql-spqr-spring-boot-starter
+graphql:
+  servlet:
+    corsEnabled: true
+  spqr:
+    http:
+      enabled: true
+      endpoint: /graphql
+    gui:
+      enabled: true
+      endpoint: /
+      page-title: LAM
+logging:
+  level:
+    org:
+      hibernate: DEBUG
+#      springframework:
+#        web: DEBUG
+
