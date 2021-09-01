@@ -27,7 +27,7 @@ public class AutoShopPictureService extends BaseServiceImpl<AutoShopPicture, UUI
 
     @GraphQLMutation(name = "saveShopPicture")
     public AutoShopPicture create(@GraphQLNonNull String picURL, @GraphQLNonNull UUID shopId) {
-        AutoShop shop = shopService.findById(shopId);
+        AutoShop        shop            = shopService.findById(shopId);
         AutoShopPicture autoShopPicture = new AutoShopPicture();
         autoShopPicture.setShop(shop);
         autoShopPicture.setPictureURL(picURL);
@@ -36,7 +36,7 @@ public class AutoShopPictureService extends BaseServiceImpl<AutoShopPicture, UUI
 
     @GraphQLMutation(name = "saveMultipleShopPictures")
     public List<AutoShopPicture> createBatch(@GraphQLNonNull UUID shopId, @GraphQLNonNull List<String> urls) {
-        AutoShop shop = shopService.findById(shopId);
+        AutoShop              shop           = shopService.findById(shopId);
         List<AutoShopPicture> picturesToSave = new ArrayList<>();
 
         urls.forEach(url -> {

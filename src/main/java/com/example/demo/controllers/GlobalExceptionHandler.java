@@ -11,7 +11,7 @@ import javax.validation.ConstraintViolationException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final HttpStatus INTERNAL_SERVER_ERROR_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
-    private static final HttpStatus BAD_REQUEST_STATUS = HttpStatus.BAD_REQUEST;
+    private static final HttpStatus BAD_REQUEST_STATUS           = HttpStatus.BAD_REQUEST;
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<CustomExceptionResponse> oops(NullPointerException exception) {

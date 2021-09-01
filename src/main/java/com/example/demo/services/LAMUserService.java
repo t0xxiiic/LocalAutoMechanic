@@ -71,8 +71,8 @@ public class LAMUserService extends BaseServiceImpl<LAMUser, UUID, LAMUserReposi
             @GraphQLNonNull UUID userId,
             @GraphQLNonNull UUID shopId
     ) {
-        LAMUser user = findById(userId);
-        AutoShop shop = autoShopService.findById(shopId);
+        LAMUser       user      = findById(userId);
+        AutoShop      shop      = autoShopService.findById(shopId);
         Set<AutoShop> favorites = user.getFavorites();
         favorites.add(shop);
         update(userId, user);

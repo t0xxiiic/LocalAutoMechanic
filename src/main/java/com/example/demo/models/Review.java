@@ -42,7 +42,7 @@ public class Review extends BaseEntity {
     )
     private LAMUser user;
 
-//    @ManyToOne(cascade = CascadeType.ALL)
+    //    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
     @JoinColumn(
             referencedColumnName = "id",

@@ -22,7 +22,7 @@ import static com.example.demo.utils.Constants.*;
 @GraphQLApi
 public class CommentService extends BaseServiceImpl<Comment, UUID, CommentRepository> {
     private final LAMUserService userService;
-    private final ReviewService reviewService;
+    private final ReviewService  reviewService;
 
     @Autowired
     public CommentService(

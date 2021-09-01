@@ -39,7 +39,7 @@ public class AutoShop extends BaseEntity {
     private String city;
     private String description;
     private String phoneNumber;
-    private short rating;
+    private short  rating;
     @NotNull
     private Double latitude;
     @NotNull

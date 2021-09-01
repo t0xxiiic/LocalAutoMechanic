@@ -28,7 +28,7 @@ public class ReviewService extends BaseServiceImpl<Review, UUID, ReviewRepositor
     private static final String DUPLICATE_REVIEW_EXCEPTION_MESSAGE = "%s has already submitted a review for this shop.";
 
     private final AutoShopService shopService;
-    private final LAMUserService userService;
+    private final LAMUserService  userService;
 
     @Autowired
     public ReviewService(ReviewRepository repository, AutoShopService shopService, LAMUserService userService) {
@@ -55,7 +55,7 @@ public class ReviewService extends BaseServiceImpl<Review, UUID, ReviewRepositor
         if (checkForExistingUserReview(userId)) {
             throw new IllegalArgumentException(String.format(DUPLICATE_REVIEW_EXCEPTION_MESSAGE, userId));
         }
-        LAMUser user = userService.findById(userId);
+        LAMUser  user = userService.findById(userId);
         AutoShop shop = shopService.findById(shopId);
         shop.setRating((short) ((shop.getRating() + review.getUserRating()) / 2));
         review.setUser(user);
