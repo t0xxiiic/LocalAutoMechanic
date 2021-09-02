@@ -21,7 +21,7 @@ import static com.example.demo.utils.Constants.SHOP_UNIQUE_NAME_CONSTRAINT;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "shops", uniqueConstraints = @UniqueConstraint(name = SHOP_UNIQUE_NAME_CONSTRAINT, columnNames = "name"))
+@Table(name = "shops", uniqueConstraints = @UniqueConstraint(name = SHOP_UNIQUE_NAME_CONSTRAINT, columnNames = {"name", "city"}))
 @DynamicInsert
 @DynamicUpdate
 public class AutoShop extends BaseEntity {

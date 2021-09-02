@@ -8,10 +8,12 @@ import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.UUID;
 
 import static com.example.demo.utils.Constants.*;
@@ -21,10 +23,30 @@ import static com.example.demo.utils.Constants.*;
 public class AutoShopService extends BaseServiceImpl<AutoShop, UUID, AutoShopRepository> {
 
     public static final String UNIQUE_SHOP_NAME_MSG = "Shop with name %s already exists.";
+    public static final String SHOP_NOT_FOUND_MSG   = "Shop %s in %s not found.";
 
     @Autowired
     public AutoShopService(AutoShopRepository repository) {
         super(repository);
+    }
+
+    @GraphQLQuery(name = "getShopByNameAndCity")
+    public AutoShop findByName(
+            @GraphQLNonNull String shopName,
+            @GraphQLNonNull String city
+    ) {
+        if (StringUtils.isAnyBlank(shopName, city)) {
+            throw new IllegalArgumentException("Shop name and city must not be empty or blank.");
+        }
+        return repository
+                .findByNameAndCityAllIgnoreCase(shopName, city)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(SHOP_NOT_FOUND_MSG, shopName, city)));
+    }
+
+    @Override
+    @GraphQLQuery(name = "getShop")
+    public AutoShop findById(@GraphQLNonNull UUID uuid) {
+        return super.findById(uuid);
     }
 
     @Override

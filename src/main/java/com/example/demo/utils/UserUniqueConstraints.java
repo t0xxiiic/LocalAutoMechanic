@@ -14,14 +14,4 @@ public enum UserUniqueConstraints {
     UserUniqueConstraints(String constraintName) {
         this.constraintName = constraintName;
     }
-
-    public static UserUniqueConstraints findMatchingConstraint(String inputConstraintName) {
-        if (inputConstraintName.equals(USERNAME.getConstraintName())) {
-            return USERNAME;
-        }
-        if (inputConstraintName.equals(EMAIL.getConstraintName())) {
-            return EMAIL;
-        }
-        return null;
-    }
 }

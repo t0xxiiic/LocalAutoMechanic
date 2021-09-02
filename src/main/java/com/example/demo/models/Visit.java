@@ -2,6 +2,7 @@ package com.example.demo.models;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "visits")
+@DynamicUpdate
 public class Visit extends BaseEntity {
     @ManyToOne
     @JoinColumn(

@@ -70,23 +70,24 @@ public abstract class BaseServiceImpl<
 
     @Override
     public boolean existsById(@NotNull ID id) {
-        if (!repository.existsById(id)) {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_MSG, id));
+        if (repository.existsById(id)) {
+            return true;
         }
-        return true;
+        throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_MSG, id));
     }
 
     @Override
     public boolean validEntity(@NotNull E entity) {
         Set<ConstraintViolation<E>> constraintViolations = validator.validate(entity);
 
-        if (!constraintViolations.isEmpty()) {
-            StringBuilder errorMessages = new StringBuilder();
-            for (ConstraintViolation<E> constraintViolation : constraintViolations) {
-                errorMessages.append(constraintViolation.getMessage());
-            }
-            throw new ConstraintViolationException(VALIDATION_MESSAGE_PREFIX + errorMessages, constraintViolations);
+        if (constraintViolations.isEmpty()) {
+            return true;
         }
-        return true;
+
+        StringBuilder errorMessages = new StringBuilder();
+        for (ConstraintViolation<E> constraintViolation : constraintViolations) {
+            errorMessages.append(constraintViolation.getMessage());
+        }
+        throw new ConstraintViolationException(VALIDATION_MESSAGE_PREFIX + errorMessages, constraintViolations);
     }
 }

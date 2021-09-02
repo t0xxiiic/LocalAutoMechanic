@@ -3,6 +3,7 @@ package com.example.demo.models;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "comments")
+@DynamicUpdate
 public class Comment extends BaseEntity {
 
     public Comment(UUID userId, UUID reviewId) {

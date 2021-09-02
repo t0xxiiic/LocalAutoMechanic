@@ -1,6 +1,5 @@
 package com.example.demo.models;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -42,8 +41,8 @@ public class Review extends BaseEntity {
     )
     private LAMUser user;
 
-    //    @ManyToOne(cascade = CascadeType.ALL)
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
+//    @ManyToOne
     @JoinColumn(
             referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "fk_shop_reviews"),
@@ -55,6 +54,9 @@ public class Review extends BaseEntity {
     private short userRating;
 
     private String comment;
+
+    @Column(columnDefinition = "varchar(255)[]")
+    private String[] reviewPictures = {};
 
     @OneToMany(mappedBy = "review")
     private List<Comment> thread = new ArrayList<>();
