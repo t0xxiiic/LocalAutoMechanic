@@ -5,11 +5,7 @@ import com.example.demo.models.LAMUser;
 import com.example.demo.models.Review;
 import com.example.demo.repositories.ReviewRepository;
 import com.example.demo.services.base.BaseServiceImpl;
-import com.example.demo.utils.Constants;
-import io.leangen.graphql.annotations.GraphQLArgument;
-import io.leangen.graphql.annotations.GraphQLMutation;
-import io.leangen.graphql.annotations.GraphQLNonNull;
-import io.leangen.graphql.annotations.GraphQLQuery;
+import io.leangen.graphql.annotations.*;
 import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +16,7 @@ import java.util.UUID;
 
 import static com.example.demo.utils.Constants.DEFAULT_PAGE;
 import static com.example.demo.utils.Constants.DEFAULT_PAGE_SIZE;
+import static java.lang.String.format;
 
 @Service
 @GraphQLApi
@@ -37,13 +34,29 @@ public class ReviewService extends BaseServiceImpl<Review, UUID, ReviewRepositor
         this.userService = userService;
     }
 
-    @GraphQLQuery(name = "getShopReviewsPaged")
-    public Page<Review> getShopReviewsPaged(
+    @GraphQLQuery(name = "shopReviews")
+    public Page<Review> getShopReviews(
             @GraphQLArgument(name = "page", defaultValue = DEFAULT_PAGE) int page,
             @GraphQLArgument(name = "size", defaultValue = DEFAULT_PAGE_SIZE) int size,
-            @GraphQLNonNull UUID shopId
+            @GraphQLContext AutoShop shop
     ) {
-        return repository.findByShopId(shopId, PageRequest.of(page, size));
+        return repository.findByShopId(shop.getId(), PageRequest.of(page, size));
+    }
+
+    @GraphQLQuery(name = "userReviews")
+    public Page<Review> getUserReviews(
+            @GraphQLArgument(name = "page", defaultValue = DEFAULT_PAGE) int page,
+            @GraphQLArgument(name = "size", defaultValue = DEFAULT_PAGE_SIZE) int size,
+            @GraphQLContext LAMUser user
+    ) {
+        return repository.findByUserId(user.getId(), PageRequest.of(page, size));
+    }
+
+    @GraphQLQuery(name = "ratingsCount")
+    public int getRatingsCount(
+            @GraphQLContext AutoShop shop
+    ) {
+        return repository.countByShopId(shop.getId());
     }
 
     @GraphQLMutation(name = "saveReview")
@@ -53,11 +66,21 @@ public class ReviewService extends BaseServiceImpl<Review, UUID, ReviewRepositor
             @GraphQLNonNull UUID shopId
     ) {
         if (checkForExistingUserReview(userId)) {
-            throw new IllegalArgumentException(String.format(DUPLICATE_REVIEW_EXCEPTION_MESSAGE, userId));
+            throw new IllegalArgumentException(format(DUPLICATE_REVIEW_EXCEPTION_MESSAGE, userId));
         }
-        LAMUser  user = userService.findById(userId);
-        AutoShop shop = shopService.findById(shopId);
-        shop.setRating((short) ((shop.getRating() + review.getUserRating()) / 2));
+        LAMUser  user       = userService.findById(userId);
+        short    userRating = review.getUserRating();
+        AutoShop shop       = shopService.findById(shopId);
+        short    shopRating = shop.getRating();
+
+        // In case of first review
+        if (shopRating == 0) {
+            shopRating = userRating;
+        }
+        if (userRating != 0) {
+            shop.setRating((short) ((userRating + shopRating) / 2));
+        }
+
         review.setUser(user);
         review.setShop(shop);
         return super.create(review);

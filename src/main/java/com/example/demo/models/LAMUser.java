@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import io.leangen.graphql.annotations.GraphQLIgnore;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -7,6 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -33,48 +35,19 @@ public class LAMUser extends BaseEntity {
         setId(id);
     }
 
-    @NotNull
-    private String username;
-
-    @NotNull
+    @Size(min = 5, max = 30)
+    @NotNull private String username;
     @Email
-    private String email;
+    @NotNull private String email;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String profilePic;
-
+    private String    firstName;
+    private String    lastName;
+    @Builder.Default
+    private String    profilePic = "https://i.imgur.com/km4Popk.png";
     private LocalDate birthDay;
+    private String    phoneNumber;
 
-    private String phoneNumber;
-
-    @ManyToMany
-    @JoinTable(
-            name = "favorites",
-            joinColumns = @JoinColumn(
-                    name = "user_id",
-                    referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "fk_users_favorites")
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "shop_id",
-                    referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "fk_shops_favorites")
-            )
-    )
-    @Builder.Default
-    private Set<AutoShop> favorites = new HashSet<>();
-
-    @OneToMany(mappedBy = "user")
-    @Builder.Default
-    private List<Visit> visits = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    @Builder.Default
-    private List<Review> reviews = new ArrayList<>();
-
+    @GraphQLIgnore
     @ManyToMany
     @JoinTable(
             name = "users_shops",
@@ -92,7 +65,30 @@ public class LAMUser extends BaseEntity {
     @Builder.Default
     private Set<AutoShop> shopsOwned = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
+    @GraphQLIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "favorites",
+            joinColumns = @JoinColumn(
+                    name = "user_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "fk_users_favorites")
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "shop_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "fk_shops_favorites")
+            )
+    )
     @Builder.Default
+    private Set<AutoShop> favorites = new HashSet<>();
+
+    @GraphQLIgnore @OneToMany(mappedBy = "user") @Builder.Default
+    private List<Visit> visits = new ArrayList<>();
+
+    @GraphQLIgnore @OneToMany(mappedBy = "user") @Builder.Default
+    private List<Review> reviews = new ArrayList<>();
+
+    @GraphQLIgnore @OneToMany(mappedBy = "user") @Builder.Default
     private List<Comment> userComments = new ArrayList<>();
 }

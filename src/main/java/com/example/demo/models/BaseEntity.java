@@ -7,11 +7,12 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 import java.util.UUID;
 
 @MappedSuperclass
 @Data
-public class BaseEntity {
+public class BaseEntity implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(

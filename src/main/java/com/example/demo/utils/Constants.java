@@ -16,8 +16,8 @@ public final class Constants {
     public static final String DEFAULT_PAGE_SIZE = "10";
 
     // Constraint names
-    public static final String USER_UNIQUE_USERNAME_CONSTRAINT  = "uc_users_username";
-    public static final String USER_UNIQUE_EMAIL_CONSTRAINT     = "uc_users_email";
-    public static final String SHOP_UNIQUE_NAME_CONSTRAINT      = "uc_shop_name";
-    public static final String REVIEW_UNIQUE_USER_ID_CONSTRAINT = "uc_user_id_reviews";
+    public static final String USER_UNIQUE_USERNAME_CONSTRAINT      = "uc_users_username";
+    public static final String USER_UNIQUE_EMAIL_CONSTRAINT         = "uc_users_email";
+    public static final String SHOP_UNIQUE_NAME_AND_CITY_CONSTRAINT = "uc_shop_name_and_city";
+    public static final String REVIEW_UNIQUE_USER_ID_CONSTRAINT     = "uc_user_id_reviews";
 }

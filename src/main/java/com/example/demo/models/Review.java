@@ -55,7 +55,7 @@ public class Review extends BaseEntity {
 
     private String comment;
 
-    @Column(columnDefinition = "varchar(255)[]")
+    //    @Column(columnDefinition = "varchar(255)[]")
     private String[] reviewPictures = {};
 
     @OneToMany(mappedBy = "review")
